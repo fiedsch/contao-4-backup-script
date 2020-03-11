@@ -79,5 +79,6 @@ und `my.cnf` so: (siehe [Issue #1](https://github.com/fiedsch/contao-4-backup-sc
  [mysqldump]
  password=my_password
  ```
+
 * Fehlerprüfungen und ggf. -meldungen
 
