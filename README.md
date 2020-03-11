@@ -73,10 +73,11 @@ als die Issue in diesem Repository - Danke!
 * Liste der gesicherten Dateien auf "ist alles benötigte dabei" prüfen (möglichst viele
   Spezialfälle berücksichtigen; Danke für Feedback/"Issues" falls ihr etwas findet!)
 * `mysqldump` ohne (direkte) Angabe des Passworts: `mysqldump --defaults-file=/path-to-file/my.cnf`
-und `my.cnf` so:
+und `my.cnf` so: (siehe [Issue #1](https://github.com/fiedsch/contao-4-backup-script/issues/1))
 
  ```
  [mysqldump]
  password=my_password
  ```
-* Fehlerprüfungen und ggf. -meldungen (siehe [Issue #14](https://github.com/fiedsch/contao-4-backup-script/issues/14))
+* Fehlerprüfungen und ggf. -meldungen
+
