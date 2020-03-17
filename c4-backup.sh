@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "starte Backup ${DUMP_NAME}"
+
 # shellcheck disable=SC2086
 
 # Sind die benötigten Variablen gesetzt?
@@ -284,5 +286,7 @@ then
     echo "aktuell vorhandene Backups:"
     ls -lh ${TARGET_DIR}/${DUMP_NAME}_*
 fi
+
+echo "Backup ${DUMP_NAME} beendet (gespeichert in ${TARGET_DIR})"
 
 ## EOF ##
