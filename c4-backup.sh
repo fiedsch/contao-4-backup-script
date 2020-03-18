@@ -222,20 +222,26 @@ then
     done
 fi
 
+# write credentials file so we don't have to specify the password as a command line argument
+cat << EOF > ${TARGET_DIR}/my.cnf
+[mysqldump]
+user=${DBUSER}
+password=${DBPASSWORD}
+EOF
+
+
 ${MYSQLDUMP} \
-    --user="${DBUSER}" \
-    --password="${DBPASSWORD}" \
-    --host="${DBHOST}" \
-    --port="${DBPORT}" \
+    --defaults-file=${TARGET_DIR}/my.cnf \
+    --host=${DBHOST} \
+    --port=${DBPORT} \
     ${DBOPTIONS} \
     ${IGNORE_TABLES} \
     ${DBNAME} \
     > ${TARGET_DIR}/${DUMP_NAME}_${NOW}.sql \
     && ${MYSQLDUMP} \
-    --user="${DBUSER}" \
-    --password="${DBPASSWORD}" \
-    --host="${DBHOST}" \
-    --port="${DBPORT}" \
+    --defaults-file=${TARGET_DIR}/my.cnf \
+    --host=${DBHOST} \
+    --port=${DBPORT} \
     --no-data \
     ${DBOPTIONS} \
     ${DBNAME} \
@@ -286,6 +292,8 @@ then
     echo "aktuell vorhandene Backups:"
     ls -lh ${TARGET_DIR}/${DUMP_NAME}_*
 fi
+
+rm ${TARGET_DIR}/my.cnf || echo "konnte (temporäre) Passwortdatei nicht löschen"
 
 echo "Backup ${DUMP_NAME} beendet (gespeichert in ${TARGET_DIR})"
 
