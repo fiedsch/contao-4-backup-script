@@ -290,7 +290,7 @@ then
 
     rm -f ${TARGET_DIR}/${DUMP_NAME}_${OLD}*
     echo "aktuell vorhandene Backups:"
-    ls -lh ${TARGET_DIR}/${DUMP_NAME}_*
+    ( cd ${TARGET_DIR} && ls -lh ${DUMP_NAME}_* )
 fi
 
 rm ${TARGET_DIR}/my.cnf || echo "konnte (temporäre) Passwortdatei nicht löschen"
