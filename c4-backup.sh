@@ -289,9 +289,10 @@ then
     echo "loesche altes Backup vom '${OLD}'"
 
     rm -f ${TARGET_DIR}/${DUMP_NAME}_${OLD}*
-    echo "aktuell vorhandene Backups:"
-    ( cd ${TARGET_DIR} && ls -lh ${DUMP_NAME}_* )
 fi
+
+echo "aktuell vorhandene Backups:"
+( cd ${TARGET_DIR} && ls -lh ${DUMP_NAME}_* )
 
 rm ${TARGET_DIR}/my.cnf || echo "konnte (temporäre) Passwortdatei nicht löschen"
 
