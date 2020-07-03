@@ -226,7 +226,7 @@ fi
 cat << EOF > ${TARGET_DIR}/my.cnf
 [mysqldump]
 user=${DBUSER}
-password=${DBPASSWORD}
+password='${DBPASSWORD}'
 EOF
 
 
