@@ -104,7 +104,7 @@ SCRIPT_DIR=/dir/where/the/main/backup_script/is/located
 # siehe 'man mysqldump'
 
 #DBOPTIONS=''
-DBOPTIONS='--hex-blob --add-drop-table --comments --dump-date'
+DBOPTIONS='--hex-blob --add-drop-table --comments --dump-date --no-tablespaces'
 
 
 # Nicht zu sichernde Datenbanktabellen
