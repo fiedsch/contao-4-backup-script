@@ -225,7 +225,7 @@ fi
 # write credentials file so we don't have to specify the password as a command line argument
 cat << EOF > ${TARGET_DIR}/my.cnf
 [mysqldump]
-user=${DBUSER}
+user='${DBUSER}'
 password='${DBPASSWORD}'
 EOF
 
