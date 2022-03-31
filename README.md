@@ -52,6 +52,7 @@ In der `main.sh`
 
 @zonky2: In der `main.sh`
  * `OS` auf den Wert `Linux` setzen
+ 
 @codesache: 
  * `mysql` muss u.U. erst über den Softwaremanager installiert werden (Paket GROW)
 
