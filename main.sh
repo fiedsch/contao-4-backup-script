@@ -64,6 +64,12 @@ DUMP_NAME=myprojekt
 CONTAO_DIR=/path/to/contao/installation/directory
 
 
+# Web-Root = der öffentlich erreichbare Unterordner.
+# web (oder public ab Contao 4.12)
+# siehe auch https://docs.contao.org/manual/de/installation/systemvoraussetzungen/#hosting-konfiguration
+WEB_ROOT=web
+
+
 # Soll das files Verzeichnis auch gesichert werden?
 #
 # Wenn das files/ Verzeichnis sehr groß ist, ist es evtl sinnvoll,
@@ -81,7 +87,7 @@ BACKUP_CONTAO_FILES=1
 # * das share/ Verzeichnis mit der/den Sitemaps
 # * Unterverzeichnis(se) von system/modules/ bei manuell installierten Contao 3 Erweiterungen
 
-#BACKUP_USER_DIRS='web/share/ system/modules/myextension/'
+#BACKUP_USER_DIRS="${WEB_ROOT}/share/ system/modules/myextension/"
 BACKUP_USER_DIRS=''
 
 
@@ -90,7 +96,7 @@ BACKUP_USER_DIRS=''
 # (wie z.B. web/robots.txt web/manifest.json), die Zugangsdaten für die app_dev.php (.env),
 # oder beliebige andere Dateien verwendet werden. Angabe jeweils relativ zum CONTAO_DIR.
 
-#BACKUP_USER_FILES='.env web/robots.txt web/manifest.json system/config/dcaconfig.php'
+#BACKUP_USER_FILES=".env ${WEB_ROOT}/robots.txt ${WEB_ROOT}/manifest.json system/config/dcaconfig.php"
 BACKUP_USER_FILES=''
 
 
@@ -110,9 +116,10 @@ DBOPTIONS='--hex-blob --add-drop-table --comments --dump-date --no-tablespaces'
 # Nicht zu sichernde Datenbanktabellen
 # Eine durch Leerzeichen getrennte Liste, die aber auch leer sein darf.
 # Von diesen Tabellen wird nur die Tabellenstruktur, aber keine Daten gesichert.
+# Vgl. auch https://docs.contao.org/manual/de/cli/datenbank-backups/#konfigurationsmoeglichkeiten
 
 #SKIP_THESE_TABLES=''
-SKIP_THESE_TABLES='tl_log tl_search tl_search_index tl_undo tl_version'
+SKIP_THESE_TABLES='tl_crawl_queue tl_log tl_search tl_search_index tl_search_term tl_undo tl_version'
 
 
 # Alte Backups nach x Tagen periodisch löschen?

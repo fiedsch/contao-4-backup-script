@@ -113,7 +113,7 @@ read -r -d '' FILE_LIST <<- EOF
     composer.json composer.lock
     system/config/localconfig.php
     templates/
-    web/.htaccess
+    ${WEB_ROOT}/.htaccess
 EOF
 
 # (a.2) app/ bzw. ab Contao 4.8 config/ und contao/
