@@ -52,6 +52,7 @@ fi
 # Slash am Ende entfernen (falls vorhanden -- ansonsten no-op)
 
 CONTAO_DIR=${CONTAO_DIR%/}
+WEB_ROOT=${WEB_ROOT%/}
 TARGET_DIR=${TARGET_DIR%/}
 SCRIPT_DIR=${SCRIPT_DIR%/}
 
