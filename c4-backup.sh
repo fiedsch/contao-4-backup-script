@@ -12,13 +12,13 @@ then
   return
 fi
 
-if [ -z $MYSQLDUMP ]
+if [ -z "$MYSQLDUMP" ]
 then
   echo "Fehler in $0: Variable MYSQLDUMP ist nicht gesetzt"
   return
 fi
 
-if [ -z $TAR ]
+if [ -z "$TAR" ]
 then
   echo "Fehler in $0: Variable TAR ist nicht gesetzt"
   return
@@ -66,19 +66,19 @@ DUMP_NAME=${DUMP_NAME##-}
 
 # Checks: Existieren die angegebenen Verzeichnisse?
 
-if [ ! -d ${SCRIPT_DIR} ]
+if [ ! -d "${SCRIPT_DIR}" ]
 then
     echo "Fehler in $0: SCRIPT_DIR: Verzeichnis ${SCRIPT_DIR} existiert nicht"
     return
 fi
 
-if [ ! -d ${CONTAO_DIR} ]
+if [ ! -d "${CONTAO_DIR}" ]
 then
     echo "Fehler in $0: CONTAO_DIR: Verzeichnis ${CONTAO_DIR} existiert nicht"
     return
 fi
 
-if [ ! -d ${TARGET_DIR} ]
+if [ ! -d "${TARGET_DIR}" ]
 then
     echo "Fehler in $0: TARGET_DIR: Verzeichnis ${TARGET_DIR} existiert nicht"
     return
@@ -89,7 +89,7 @@ fi
 # Kann mit der Variablen BACKUP_TIMESTAMP_FORMAT konfiguriert werden.
 # Falls diese nicht gesetzt ist, wird ein Standard verwendet.
 
-if [ -z ${BACKUP_TIMESTAMP_FORMAT} ]
+if [ -z "${BACKUP_TIMESTAMP_FORMAT}" ]
 then
   BACKUP_TIMESTAMP_FORMAT='%Y-%m-%d'
 fi
@@ -101,9 +101,9 @@ NOW=$(date +"${BACKUP_TIMESTAMP_FORMAT}")
 
 if [ ${BACKUP_CONTAO_FILES} -gt 0 ]
 then
-    ( cd ${CONTAO_DIR} && ${TAR} cf ${TARGET_DIR}/${DUMP_NAME}_${NOW}.files.tar files && gzip --force ${TARGET_DIR}/${DUMP_NAME}_${NOW}.files.tar )
+    ( cd "${CONTAO_DIR}" && ${TAR} cf "${TARGET_DIR}/${DUMP_NAME}_${NOW}.files.tar" files && gzip --force "${TARGET_DIR}/${DUMP_NAME}_${NOW}.files.tar" )
 else
-    ( echo "Dateisicherung übersprungen, da BACKUP_CONTAO_FILES=${BACKUP_CONTAO_FILES} in $0" > ${TARGET_DIR}/${DUMP_NAME}_${NOW}.files.txt )
+    ( echo "Dateisicherung übersprungen, da BACKUP_CONTAO_FILES=${BACKUP_CONTAO_FILES} in $0" > "${TARGET_DIR}/${DUMP_NAME}_${NOW}.files.txt" )
 fi
 
 
@@ -121,7 +121,7 @@ EOF
 
 for d in app config contao
 do
-    if [ -d ${CONTAO_DIR}/${d} ]
+    if [ -d "${CONTAO_DIR}/${d}" ]
     then
         FILE_LIST="${FILE_LIST} ${d}/"
     fi
@@ -129,7 +129,7 @@ done
 
 # (b) ggf. vorhandenes Verzeichnis src/ (anwendungsspezifische Erweiterungen)
 
-if [ -d ${CONTAO_DIR}/src ]
+if [ -d "${CONTAO_DIR}/src" ]
 then
     FILE_LIST="${FILE_LIST} src/"
 fi
@@ -140,7 +140,7 @@ if [ -n "${BACKUP_USER_DIRS}" ]
 then
     for d in ${BACKUP_USER_DIRS}
     do
-        if [ -d ${CONTAO_DIR}/$d ]
+        if [ -d "${CONTAO_DIR}/$d" ]
         then
             FILE_LIST="${FILE_LIST} ${d}"
         fi
@@ -153,7 +153,7 @@ if [ -n "${BACKUP_USER_FILES}" ]
 then
     for f in ${BACKUP_USER_FILES}
     do
-        if [ -e ${CONTAO_DIR}/${f} ]
+        if [ -e "${CONTAO_DIR}/${f}" ]
         then
             FILE_LIST="${FILE_LIST} ${f}"
         fi
@@ -163,7 +163,7 @@ fi
 
 #  FILE_LIST sichern
 
-( cd ${CONTAO_DIR} && ${TAR} cf ${TARGET_DIR}/${DUMP_NAME}_${NOW}.tar ${FILE_LIST} && gzip --force ${TARGET_DIR}/${DUMP_NAME}_${NOW}.tar )
+( cd "${CONTAO_DIR}" && ${TAR} cf "${TARGET_DIR}/${DUMP_NAME}_${NOW}.tar" ${FILE_LIST} && gzip --force "${TARGET_DIR}/${DUMP_NAME}_${NOW}.tar" )
 
 
 # Datenbank Verbindungsdaten bestimmen
@@ -181,7 +181,7 @@ fi
 
 function get_db_param() {
     PARAMETER=$1
-    ${PHP_CLI} ${CONTAO_DIR}/vendor/bin/contao-console debug:container --parameter=${PARAMETER} \
+    ${PHP_CLI} "${CONTAO_DIR}/vendor/bin/contao-console" debug:container --parameter=${PARAMETER} \
       | sed -n 4p \
       | sed -e's/^ *//' \
       | cut -d' ' -f2- \
@@ -224,7 +224,7 @@ then
 fi
 
 # write credentials file so we don't have to specify the password as a command line argument
-cat << EOF > ${TARGET_DIR}/my.cnf
+cat << EOF > "${TARGET_DIR}/my.cnf"
 [mysqldump]
 user='${DBUSER}'
 password='${DBPASSWORD}'
@@ -232,23 +232,23 @@ EOF
 
 
 ${MYSQLDUMP} \
-    --defaults-file=${TARGET_DIR}/my.cnf \
+    --defaults-file="${TARGET_DIR}/my.cnf" \
     --host=${DBHOST} \
     --port=${DBPORT} \
     ${DBOPTIONS} \
     ${IGNORE_TABLES} \
     ${DBNAME} \
-    > ${TARGET_DIR}/${DUMP_NAME}_${NOW}.sql \
+    > "${TARGET_DIR}/${DUMP_NAME}_${NOW}.sql" \
     && ${MYSQLDUMP} \
-    --defaults-file=${TARGET_DIR}/my.cnf \
+    --defaults-file="${TARGET_DIR}/my.cnf" \
     --host=${DBHOST} \
     --port=${DBPORT} \
     --no-data \
     ${DBOPTIONS} \
     ${DBNAME} \
     ${SKIP_THESE_TABLES} \
-    >> ${TARGET_DIR}/${DUMP_NAME}_${NOW}.sql \
-    && gzip --force ${TARGET_DIR}/${DUMP_NAME}_${NOW}.sql
+    >> "${TARGET_DIR}/${DUMP_NAME}_${NOW}.sql" \
+    && gzip --force "${TARGET_DIR}/${DUMP_NAME}_${NOW}.sql"
 
 
 # Alte Backups rollierend löschen
@@ -268,7 +268,7 @@ then
     #
     # Nur, falls das Betriebssystem nicht bereits in der Variablen OS angegeben wurde (siehe main.sh)
 
-    if [ -z ${OS} ]
+    if [ -z "${OS}" ]
     then
         ## assert_command 'uname' "(Behebung: 'OS' setzen)" || return
 
@@ -289,13 +289,13 @@ then
     echo "Backup-Vezeichnis ist: ${TARGET_DIR}"
     echo "loesche altes Backup vom '${OLD}'"
 
-    rm -f ${TARGET_DIR}/${DUMP_NAME}_${OLD}*
+    rm -f "${TARGET_DIR}/${DUMP_NAME}_${OLD}*"
 fi
 
 echo "aktuell vorhandene Backups:"
-( cd ${TARGET_DIR} && ls -lh ${DUMP_NAME}_* )
+( cd "${TARGET_DIR}" && ls -lh "${DUMP_NAME}_*" )
 
-rm ${TARGET_DIR}/my.cnf || echo "konnte (temporäre) Passwortdatei nicht löschen"
+rm "${TARGET_DIR}/my.cnf" || echo "konnte (temporäre) Passwortdatei nicht löschen"
 
 echo "Backup ${DUMP_NAME} beendet (gespeichert in ${TARGET_DIR})"
 

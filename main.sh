@@ -22,7 +22,7 @@ TAR=tar
 
 # Optionale Parameter
 
-# Format des Zeitstempels, der als Bestandfteil der Backupdateien verwendet werden soll.
+# Format des Zeitstempels, der als Bestandteil der Backupdateien verwendet werden soll.
 # Standardwert (wenn nicht gesetzt) ist '%Y-%m-%d'.
 
 #BACKUP_TIMESTAMP_FORMAT='%Y-%m-%d_%H_%M_%S'
@@ -59,7 +59,8 @@ DUMP_NAME=myprojekt
 #
 # Achtung: hier wird das Verzeichnis angegeben, in Contao installiert wurde.
 # Das ist das Verzeichnis, in dem die composer.json der Installation liegt.
-# NICHT gemeint ist das Unterverzeichnis web/, auf das die Domain gesetzt wurde!
+# NICHT gemeint ist das Unterverzeichnis web/, auf das die Domain gesetzt wurde
+# (siehe dazu WEB_ROOT weiter unten)!
 
 CONTAO_DIR=/path/to/contao/installation/directory
 
@@ -72,7 +73,7 @@ WEB_ROOT=web
 
 # Soll das files Verzeichnis auch gesichert werden?
 #
-# Wenn das files/ Verzeichnis sehr groß ist, ist es evtl sinnvoll,
+# Wenn das files/ Verzeichnis sehr groß ist, ist es evtl. sinnvoll,
 # hier das Backup auszuschalten und dieses Verzeichnis mit einem anderen
 # Mechanismus zu sichern (z.B. via rsync).
 
