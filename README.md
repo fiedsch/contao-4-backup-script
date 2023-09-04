@@ -1,8 +1,8 @@
-# Backup Script für Contao 4 Installationen
+# Backup Script für Contao Installationen (Contao 4+)
 
 ## Was macht es
 
-Erstellt ein Backup einer Contao 4 Installation. Erzeugt werden drei Dateien:
+Erstellt ein Backup einer Contao Installation. Erzeugt werden drei Dateien:
 
 * Datenbankdump
 * Sicherung der für eine Wiederherstellung benötigten Dateien
@@ -76,4 +76,3 @@ als die Issue in diesem Repository - Danke!
 * Liste der gesicherten Dateien auf "ist alles benötigte dabei" prüfen (möglichst viele
   Spezialfälle berücksichtigen; Danke für Feedback/"Issues" falls ihr etwas findet!)
 * Fehlerprüfungen und ggf. -meldungen
-
