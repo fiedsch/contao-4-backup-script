@@ -181,11 +181,19 @@ fi
 
 function get_db_param() {
     PARAMETER=$1
-    ${PHP_CLI} "${CONTAO_DIR}/vendor/bin/contao-console" debug:container --parameter=${PARAMETER} \
+    ${PHP_CLI} "${CONTAO_DIR}/vendor/bin/contao-console" debug:container --parameter=${PARAMETER} 2>&1 \
       | sed -n 4p \
       | sed -e's/^ *//' \
       | cut -d' ' -f2- \
       | sed -e's/^ *//' | sed -e's/ *$//'
+    return 0
+}
+
+function get_db_url_from_env() {
+    ${PHP_CLI} "${CONTAO_DIR}/bin/console" debug:dotenv DATABASE_URL \
+    | grep DATABASE_URL \
+    | sed -e's/^ *DATABASE_URL *//' \
+    | cut -d' ' -f1
     return 0
 }
 
@@ -206,11 +214,34 @@ function get_db_port() {
 }
 
 DBUSER=$(get_db_user)
-DBPASSWORD=$(get_db_password)
-DBHOST=$(get_db_host)
-DBNAME=$(get_db_name)
-DBPORT=$(get_db_port)
+if [ -z $DBUSER ]
+then
+  echo "Kein Contao 4, sondern Contao 5?"
+  echo "Verwende anderen Ansatz zur Bestimmung der Datenbank Zugangsdaten!"
 
+  DBURL=$(get_db_url_from_env)
+  # mysql://user:pass@host:port/databasename[?optional_parameters]
+  DBURL_PARAMETERS=$(echo $DBURL | sed -e's/mysql:\/\///' | cut -d'?' -f1)
+  # user:pass@host:port/databasename
+  DBUSER=$(echo $DBURL_PARAMETERS | cut -d':' -f1)
+  DBPASSWORD=$(echo $DBURL_PARAMETERS | cut -d':' -f2 | cut -d'@' -f1)
+  DBHOST=$(echo $DBURL_PARAMETERS | cut -d':' -f2 | cut -d'@' -f2)
+  DBPORT=$(echo $DBURL_PARAMETERS | cut -d':' -f3 | cut -d'/' -f1)
+  DBNAME=$(echo $DBURL_PARAMETERS | cut -d':' -f3 | cut -d'/' -f2)
+else
+  # Contao 4: restliche Parameter
+  DBPASSWORD=$(get_db_password)
+  DBHOST=$(get_db_host)
+  DBNAME=$(get_db_name)
+  DBPORT=$(get_db_port)
+fi
+
+# Hat weder der Contao 4-, noch der Contao 5-Ansatz funktioniert?
+if [ -z $DBUSER ] || [ -z $DBPASSWORD ] || [ -z $DBHOST ] || [ -z $DBNAME ] || [ -z $DBPORT ]
+then
+  echo "Konnte Datenbank-Zugangsdaten nicht (vollständig) bestimmen"
+  exit 1
+fi
 
 IGNORE_TABLES=''
 
