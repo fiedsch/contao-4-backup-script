@@ -261,7 +261,7 @@ echo "password='${DBPASSWORD}'" >> "${TARGET_DIR}/my.cnf"
 
 
 ${MYSQLDUMP} \
-    --defaults-file="${TARGET_DIR}/my.cnf" \
+    --defaults-extra-file="${TARGET_DIR}/my.cnf" \
     --host=${DBHOST} \
     --port=${DBPORT} \
     ${DBOPTIONS} \
@@ -269,7 +269,7 @@ ${MYSQLDUMP} \
     ${DBNAME} \
     > "${TARGET_DIR}/${DUMP_NAME}_${NOW}.sql" \
     && ${MYSQLDUMP} \
-    --defaults-file="${TARGET_DIR}/my.cnf" \
+    --defaults-extra-file="${TARGET_DIR}/my.cnf" \
     --host=${DBHOST} \
     --port=${DBPORT} \
     --no-data \
