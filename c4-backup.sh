@@ -190,11 +190,22 @@ function get_db_param() {
 }
 
 function get_db_url_from_env() {
-    ${PHP_CLI} "${CONTAO_DIR}/bin/console" debug:dotenv DATABASE_URL \
+    if [ -f "${CONTAO_DIR}/bin/console" ]
+    then
+       COMMAND="${PHP_CLI} "${CONTAO_DIR}/bin/console" debug:dotenv"
+    else
+      if [ -f "${CONTAO_DIR}/vendor/bin/contao-console" ]
+      then
+        COMMAND="${PHP_CLI} "${CONTAO_DIR}/vendor/bin/contao-console" debug:dotenv"
+      else
+        echo "Weder bin/console noch vendor/bin/contao-console gefunden. Irgendetwas stimmt hier nicht!"; exit
+      fi
+    fi
+    $COMMAND \
     | grep DATABASE_URL \
     | sed -e's/^ *DATABASE_URL *//' \
     | cut -d' ' -f1
-    return 0
+    return $?
 }
 
 function get_db_user() {
@@ -214,20 +225,37 @@ function get_db_port() {
 }
 
 DBUSER=$(get_db_user)
-if [ -z $DBUSER ]
+if [ -z $DBUSER ] || [ 'null' == $DBUSER ]
 then
-  echo "Kein Contao 4, sondern Contao 5?"
+  echo "Parameter nicht parameters.yml, sondern in .env Dateien? (z.B. in Contao 5)"
   echo "Verwende anderen Ansatz zur Bestimmung der Datenbank Zugangsdaten!"
 
   DBURL=$(get_db_url_from_env)
+  echo "Ausgelesene DBURL ist '$DBURL'. Versuche nun, diese zu zerlegen:"
   # mysql://user:pass@host:port/databasename[?optional_parameters]
   DBURL_PARAMETERS=$(echo $DBURL | sed -e's/mysql:\/\///' | cut -d'?' -f1)
+  echo "Erster Schritt, ohne Protokoll ergibt: '$DBURL_PARAMETERS'"
   # user:pass@host:port/databasename
   DBUSER=$(echo $DBURL_PARAMETERS | cut -d':' -f1)
+  #echo "(a) User '$USER' extrahiert"
   DBPASSWORD=$(echo $DBURL_PARAMETERS | cut -d':' -f2 | cut -d'@' -f1)
-  DBHOST=$(echo $DBURL_PARAMETERS | cut -d':' -f2 | cut -d'@' -f2)
-  DBPORT=$(echo $DBURL_PARAMETERS | cut -d':' -f3 | cut -d'/' -f1)
-  DBNAME=$(echo $DBURL_PARAMETERS | cut -d':' -f3 | cut -d'/' -f2)
+  #echo "(b) Password '$DBPASSWORD' extrahiert"
+   if [ $(echo $DBURL_PARAMETERS | grep -o ":" | wc -l) -eq 1 ]
+   then
+     #echo "nur ein Doppelpunkt, also Muster ohne port: user:pass@host/databasename[?optional_parameters] in $DBURL_PARAMETERS"
+     DBHOST=$(echo $DBURL_PARAMETERS | cut -d':' -f2 | cut -d'@' -f2 | cut -d'/' -f1)
+     #echo "Verwende Standardport 3306"
+     DBPORT='3306'
+   else
+     #echo "mehr als ein Doppelpunkt, also Muster mit Port: user:pass@host:port/databasename[?optional_parameters] in $DBURL_PARAMETERS"
+     DBHOST=$(echo $DBURL_PARAMETERS | cut -d':' -f2 | cut -d'@' -f2)
+     DBPORT=$(echo $DBURL_PARAMETERS | cut -d':' -f3 | cut -d'/' -f1)
+   fi
+  #echo "(c1) Host '$DBHOST' extrahiert"
+  #echo "(c2) Port '$DBPORT' extrahiert bzw. gesetzt"
+  DBNAME=$(echo $DBURL_PARAMETERS | cut -d'/' -f2)
+  #echo "(d) DB-Name '$DBNAME' extrahiert"
+
 else
   # Contao 4: restliche Parameter
   DBPASSWORD=$(get_db_password)
@@ -236,8 +264,10 @@ else
   DBPORT=$(get_db_port)
 fi
 
+### echo "Verwende DBUSER=$DBUSER, DBPASSWORD=$DBPASSWORD, DBHOST=$DBHOST, DBPORT=$DBPORT, DBNAME=$DBNAME"
+
 # Hat weder der Contao 4-, noch der Contao 5-Ansatz funktioniert?
-if [ -z $DBUSER ] || [ -z $DBPASSWORD ] || [ -z $DBHOST ] || [ -z $DBNAME ] || [ -z $DBPORT ]
+if [ -z $DBUSER ]  || [ 'null' == $DBUSER ] || [ -z $DBPASSWORD ] || [ -z $DBHOST ] || [ -z $DBNAME ] || [ -z $DBPORT ]
 then
   echo "Konnte Datenbank-Zugangsdaten nicht (vollständig) bestimmen"
   exit 1
