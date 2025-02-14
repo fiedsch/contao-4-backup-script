@@ -181,7 +181,7 @@ fi
 
 function get_db_param() {
     PARAMETER=$1
-    ${PHP_CLI} "${CONTAO_DIR}/vendor/bin/contao-console" debug:container --parameter=${PARAMETER} 2>&1 \
+    ${PHP_CLI} "${CONTAO_DIR}/vendor/bin/contao-console" debug:container --parameter=${PARAMETER} 2>/dev/null \
       | sed -n 4p \
       | sed -e's/^ *//' \
       | cut -d' ' -f2- \
