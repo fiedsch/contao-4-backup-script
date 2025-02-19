@@ -6,7 +6,7 @@ echo "starte Backup ${DUMP_NAME}"
 
 # Sind die benötigten Variablen gesetzt?
 
-if [ -z $PHP_CLI ]
+if [ -z "$PHP_CLI" ]
 then
   echo "Fehler in $0: Variable PHP_CLI ist nicht gesetzt"
   return
