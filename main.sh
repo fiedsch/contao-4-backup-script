@@ -42,6 +42,10 @@ TAR=tar
 #OS='Darwin'
 
 
+# Verbosity (Debug)
+DEBUG=0
+# DEBUG=1
+
 # Zielverzeichnis = Wo sollen die erzeugten Backups abgelegt werden.
 # Auf einem Produktivsystem ist ein öffentlich zugängliches Verzeichnis
 # keine tolle Idee ...

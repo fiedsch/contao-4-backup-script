@@ -24,6 +24,13 @@ then
   return
 fi
 
+# BC if DEBUG is not set
+if [ -z "$DEBUG" ]
+then
+  DEBUG=0
+fi
+
+
 
 # Sind die benötigten Programme vorhanden? (für hartkodierte Programmaufrufe wie gzip oder uname)
 
@@ -227,14 +234,22 @@ function get_db_port() {
 DBUSER=$(get_db_user)
 if [ -z $DBUSER ] || [ 'null' == $DBUSER ]
 then
-  echo "Parameter nicht parameters.yml, sondern in .env Dateien? (z.B. in Contao 5)"
-  echo "Verwende anderen Ansatz zur Bestimmung der Datenbank Zugangsdaten!"
-
+  if [ $DEBUG -gt 0 ]
+  then
+    echo "Parameter nicht parameters.yml, sondern in .env Dateien? (z.B. in Contao 5)"
+    echo "Verwende anderen Ansatz zur Bestimmung der Datenbank Zugangsdaten!"
+  fi
   DBURL=$(get_db_url_from_env)
-  echo "Ausgelesene DBURL ist '$DBURL'. Versuche nun, diese zu zerlegen:"
+  if [ $DEBUG -gt 0 ]
+  then
+    echo "Ausgelesene DBURL ist '$DBURL'. Versuche nun, diese zu zerlegen:"
+  fi
   # mysql://user:pass@host:port/databasename[?optional_parameters]
   DBURL_PARAMETERS=$(echo $DBURL | sed -e's/mysql:\/\///' | cut -d'?' -f1)
-  echo "Erster Schritt, ohne Protokoll ergibt: '$DBURL_PARAMETERS'"
+  if [ $DEBUG -gt 0 ]
+  then
+    echo "Erster Schritt, ohne Protokoll ergibt: '$DBURL_PARAMETERS'"
+  fi
   # user:pass@host:port/databasename
   DBUSER=$(echo $DBURL_PARAMETERS | cut -d':' -f1)
   #echo "(a) User '$USER' extrahiert"
@@ -264,7 +279,10 @@ else
   DBPORT=$(get_db_port)
 fi
 
-### echo "Verwende DBUSER=$DBUSER, DBPASSWORD=$DBPASSWORD, DBHOST=$DBHOST, DBPORT=$DBPORT, DBNAME=$DBNAME"
+if [ $DEBUG -gt 0 ]
+then
+  echo "Verwende DBUSER=$DBUSER, DBPASSWORD=$DBPASSWORD, DBHOST=$DBHOST, DBPORT=$DBPORT, DBNAME=$DBNAME"
+fi
 
 # Hat weder der Contao 4-, noch der Contao 5-Ansatz funktioniert?
 if [ -z $DBUSER ]  || [ 'null' == $DBUSER ] || [ -z $DBPASSWORD ] || [ -z $DBHOST ] || [ -z $DBNAME ] || [ -z $DBPORT ]
