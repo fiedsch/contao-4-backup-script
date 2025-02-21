@@ -46,6 +46,10 @@ TAR=tar
 DEBUG=0
 # DEBUG=1
 
+# Beim Aufruf über ein PHP Skript (z.B. all-inkl cron job) bestimmte Ausgaben nicht anzeigen (see #13)
+HIDE_ON_WEB_CALL=0
+# HIDE_ON_WEB_CALL=1
+
 # Zielverzeichnis = Wo sollen die erzeugten Backups abgelegt werden.
 # Auf einem Produktivsystem ist ein öffentlich zugängliches Verzeichnis
 # keine tolle Idee ...

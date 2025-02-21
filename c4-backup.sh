@@ -30,6 +30,12 @@ then
   DEBUG=0
 fi
 
+# BC if HIDE_ON_WEB_CALL is not set
+if [ -z "$HIDE_ON_WEB_CALL" ]
+then
+  HIDE_ON_WEB_CALL=1
+fi
+
 
 
 # Sind die benötigten Programme vorhanden? (für hartkodierte Programmaufrufe wie gzip oder uname)
@@ -363,7 +369,10 @@ then
         return
     fi
 
-    echo "Backup-Vezeichnis ist: ${TARGET_DIR}"
+    if [ $HIDE_ON_WEB_CALL -eq 0 ]
+    then
+      echo "Backup-Vezeichnis ist: ${TARGET_DIR}"
+    fi
     echo "loesche altes Backup vom '${OLD}'"
 
     rm -f "${TARGET_DIR}/${DUMP_NAME}_${OLD}"*
@@ -374,6 +383,9 @@ echo "aktuell vorhandene Backups:"
 
 rm "${TARGET_DIR}/my.cnf" || echo "konnte (temporäre) Passwortdatei nicht löschen"
 
-echo "Backup ${DUMP_NAME} beendet (gespeichert in ${TARGET_DIR})"
+if [ $HIDE_ON_WEB_CALL -eq 0 ]
+then
+  echo "Backup ${DUMP_NAME} beendet (gespeichert in ${TARGET_DIR})"
+fi
 
 ## EOF ##
