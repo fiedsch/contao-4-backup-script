@@ -390,9 +390,14 @@ then
     then
       echo "Backup-Vezeichnis ist: ${TARGET_DIR}"
     fi
-    echo "loesche altes Backup vom '${OLD}'"
 
+  if ! is_disabled 'rm'
+  then
+    echo "loesche altes Backup vom '${OLD}'"
     rm -f "${TARGET_DIR}/${DUMP_NAME}_${OLD}"*
+  else
+    echo "Löschen der alten Backups via DISABLED_FUNCTIONS deaktiviert"
+  fi
 fi
 
 if [ $HIDE_ON_WEB_CALL -eq 0 ]
@@ -404,7 +409,12 @@ then
   fi
 fi
 
-rm "${TARGET_DIR}/my.cnf" || echo "konnte (temporäre) Passwortdatei nicht löschen"
+if ! is_disabled 'rm'
+then
+  rm "${TARGET_DIR}/my.cnf" || echo "konnte (temporäre) Passwortdatei nicht löschen"
+else
+  echo "Löschen der temporären Dateien nicht möglich, da rm in der Liste DISABLED_FUNCTIONS enthalten ist"
+fi
 
 if [ $HIDE_ON_WEB_CALL -eq 0 ]
 then
