@@ -45,7 +45,7 @@ Manche Provider stellen nicht alle im Skript benötigten Befehle bereit (sperren
 In der `main.sh`
 * `TAR` auf den Wert `ptar` setzen
 * `OS` auf den Wert `Linux` setzen
-* `PURGE_AFTER_DAYS` auf `0` setzen (@mlwebworker: weil der Befehl zum Löschen nicht freigegeben ist. Die Löschung kann dann über Tools → Webspacebereinihung automatisiert werden)
+* `PURGE_AFTER_DAYS` auf `0` setzen (@mlwebworker: weil der Befehl zum Löschen nicht freigegeben ist. Die Löschung kann dann über Tools → Webspacebereinigung automatisiert werden)
 
 
 ### Mittwald
@@ -60,7 +60,7 @@ In der `main.sh`
 ### Andere Provider
 
 Feedback zu weiteren Providern, bei denen es noch nicht gelöste Probleme gibt gerne
-als die Issue in diesem Repository - Danke!
+als Issue in diesem Repository mitteilen - Danke!
 
 
 ## Restore
