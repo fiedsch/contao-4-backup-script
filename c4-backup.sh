@@ -378,8 +378,11 @@ then
     rm -f "${TARGET_DIR}/${DUMP_NAME}_${OLD}"*
 fi
 
-echo "aktuell vorhandene Backups:"
-( cd "${TARGET_DIR}" && ls -lh "${DUMP_NAME}"_* )
+if [ $HIDE_ON_WEB_CALL -eq 0 ]
+then
+  echo "aktuell vorhandene Backups:"
+  ( cd "${TARGET_DIR}" && ls -lh "${DUMP_NAME}"_* )
+fi
 
 rm "${TARGET_DIR}/my.cnf" || echo "konnte (temporäre) Passwortdatei nicht löschen"
 
