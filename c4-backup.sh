@@ -36,6 +36,23 @@ then
   HIDE_ON_WEB_CALL=1
 fi
 
+# BC if DISABLED_FUNCTIONS is not set
+if [ -z "$DISABLED_FUNCTIONS" ]
+then
+  DISABLED_FUNCTIONS=''
+fi
+
+# Prüfen, ob eine Funktion in der Liste DISABLED_FUNCTIONS enthalten ist
+function is_disabled() {
+    SEARCH=$1
+    for x in $DISABLED_FUNCTIONS
+    do
+        if [ "$x" = "$SEARCH" ]; then
+            return 0
+        fi
+    done
+    return 1
+}
 
 
 # Sind die benötigten Programme vorhanden? (für hartkodierte Programmaufrufe wie gzip oder uname)
@@ -380,8 +397,11 @@ fi
 
 if [ $HIDE_ON_WEB_CALL -eq 0 ]
 then
-  echo "aktuell vorhandene Backups:"
-  ( cd "${TARGET_DIR}" && ls -lh "${DUMP_NAME}"_* )
+  if ! is_disabled 'ls'
+  then
+    echo "aktuell vorhandene Backups:"
+    ( cd "${TARGET_DIR}" && ls -lh "${DUMP_NAME}"_* )
+  fi
 fi
 
 rm "${TARGET_DIR}/my.cnf" || echo "konnte (temporäre) Passwortdatei nicht löschen"

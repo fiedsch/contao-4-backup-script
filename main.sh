@@ -50,6 +50,12 @@ DEBUG=0
 HIDE_ON_WEB_CALL=0
 # HIDE_ON_WEB_CALL=1
 
+# Funktionen, die vom Provider entfernt wurden
+DISABLED_FUNCTIONS=''
+# Bsp. für all-inkl
+# DISABLED_FUNCTIONS='ls'
+
+
 # Zielverzeichnis = Wo sollen die erzeugten Backups abgelegt werden.
 # Auf einem Produktivsystem ist ein öffentlich zugängliches Verzeichnis
 # keine tolle Idee ...

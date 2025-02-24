@@ -46,7 +46,7 @@ In der `main.sh`
 * `TAR` auf den Wert `ptar` setzen
 * `OS` auf den Wert `Linux` setzen
 * `PURGE_AFTER_DAYS` auf `0` setzen (@mlwebworker: weil der Befehl zum Löschen nicht freigegeben ist. Die Löschung kann dann über Tools → Webspacebereinigung automatisiert werden)
-* `HIDE_ON_WEB_CALL` auf `1` setzen (Effekt: gibt Angaben zum Backup-Verzeichnis `TARGET_DIR` nicht aus und -- Nebeneffekt -- ruft den bei all-inkl gesperrten Befehl `ls` nicht auf)
+* `DISABLED_FUNCTIONS` auf `'ls'` setzen (ggf. die Liste um weitere deaktivierte Befehle ergänzen; kommaseparierte Liste)
 
 ### Mittwald
 
