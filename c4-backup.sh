@@ -222,11 +222,11 @@ function get_db_param() {
 function get_db_url_from_env() {
     if [ -f "${CONTAO_DIR}/bin/console" ]
     then
-       COMMAND="${PHP_CLI} "${CONTAO_DIR}/bin/console" debug:dotenv"
+       COMMAND="${PHP_CLI} ${CONTAO_DIR}/bin/console debug:dotenv"
     else
       if [ -f "${CONTAO_DIR}/vendor/bin/contao-console" ]
       then
-        COMMAND="${PHP_CLI} "${CONTAO_DIR}/vendor/bin/contao-console" debug:dotenv"
+        COMMAND="${PHP_CLI} ${CONTAO_DIR}/vendor/bin/contao-console debug:dotenv"
       else
         echo "Weder bin/console noch vendor/bin/contao-console gefunden. Irgendetwas stimmt hier nicht!"; exit
       fi
