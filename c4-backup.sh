@@ -30,6 +30,11 @@ then
   DEBUG=0
 fi
 
+if [ -z "$SKIP_DEBUG_CONTAINER_WITH_PARAMETER_DATABASE_USER" ]
+then
+  SKIP_DEBUG_CONTAINER_WITH_PARAMETER_DATABASE_USER=0
+fi
+
 # BC if HIDE_ON_WEB_CALL is not set
 if [ -z "$HIDE_ON_WEB_CALL" ]
 then
@@ -249,7 +254,16 @@ function get_db_url_from_env() {
 }
 
 function get_db_user() {
-    get_db_param 'database_user'
+    if [ $DIRECTLY_USE_DEBUG_DOTENV_FOR_DB_CREDENTIALS -gt 0 ]
+    then
+      # Hack für #14:
+      # Einen leeren String als Marker für "database_user nicht bestimmt" zurückgeben.
+      # Effekt: Wir verwenden im zweiten Schritt contao-console debug:dotenv um diesen zu bestimmen
+      echo ''
+    else
+      get_db_param 'database_user'
+
+    fi
 }
 function get_db_password() {
     get_db_param 'database_password'
@@ -265,7 +279,7 @@ function get_db_port() {
 }
 
 DBUSER=$(get_db_user)
-if [ -z $DBUSER ] || [ 'null' == $DBUSER ]
+if [ -z "$DBUSER" ] || [ 'null' == "$DBUSER" ]
 then
   if [ $DEBUG -gt 0 ]
   then

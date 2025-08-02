@@ -41,6 +41,17 @@ TAR=tar
 #OS='FreeBSD'
 #OS='Darwin'
 
+# Bestimmung der Datenbankzugangsdaten (insbes. Datenbank User)
+# Erfolgt entweder via vendor/bin/contao-console debug:container --parameter='database_user'
+# oder über vendor/bin/contao-console debug:dotenv
+# Ersteres führt zu einem Fehler und Eintrag im Contao Log (siehe https://github.com/fiedsch/contao-4-backup-script/issues/14)
+# Um diesen zu umgehen, kann las Hack für #14 hier DIRECTLY_USE_DEBUG_DOTENV_FOR_DB_CREDENTIALS gesetzt werden:
+#
+# Default (nein, kein Skip)
+#DIRECTLY_USE_DEBUG_DOTENV_FOR_DB_CREDENTIALS=0
+DIRECTLY_USE_DEBUG_DOTENV_FOR_DB_CREDENTIALS=1
+
+
 
 # Verbosity (Debug)
 DEBUG=0

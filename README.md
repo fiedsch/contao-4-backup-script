@@ -76,3 +76,10 @@ als Issue in diesem Repository mitteilen - Danke!
 * Liste der gesicherten Dateien auf "ist alles benötigte dabei" prüfen (möglichst viele
   Spezialfälle berücksichtigen; Danke für Feedback/"Issues" falls ihr etwas findet!)
 * Fehlerprüfungen und ggf. -meldungen
+
+
+## Limitations
+
+* Siehe Ticket https://github.com/fiedsch/contao-4-backup-script/issues/14 für das wir momentan noch keine 
+  saubere Lösung haben (außer der Verwendung von `DIRECTLY_USE_DEBUG_DOTENV_FOR_DB_CREDENTIALS` in der  
+  Aufrufdatei `main.sh`).
