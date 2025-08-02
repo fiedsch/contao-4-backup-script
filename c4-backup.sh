@@ -195,6 +195,23 @@ fi
 
 ( cd "${CONTAO_DIR}" && ${TAR} cf "${TARGET_DIR}/${DUMP_NAME}_${NOW}.tar" ${FILE_LIST} && gzip --force "${TARGET_DIR}/${DUMP_NAME}_${NOW}.tar" )
 
+# Hilfsfunktionen
+
+function get_contao_console() {
+  if [ -f "${CONTAO_DIR}/bin/console" ]
+    then
+       CONSOLE="${CONTAO_DIR}/bin/console"
+    else
+      if [ -f "${CONTAO_DIR}/vendor/bin/contao-console" ]
+      then
+        CONSOLE="${CONTAO_DIR}/vendor/bin/contao-console"
+      else
+        echo "Weder bin/console noch vendor/bin/contao-console gefunden. Irgendetwas stimmt hier nicht!"; exit
+      fi
+  fi
+  echo "$PHP_CLI $CONSOLE"
+}
+
 
 # Datenbank Verbindungsdaten bestimmen
 
@@ -211,7 +228,9 @@ fi
 
 function get_db_param() {
     PARAMETER=$1
-    ${PHP_CLI} "${CONTAO_DIR}/vendor/bin/contao-console" debug:container --parameter=${PARAMETER} 2>/dev/null \
+    CONSOLE=$(get_contao_console)
+    COMMAND="${CONSOLE} debug:container --parameter=${PARAMETER}"
+    ${COMMAND} 2>/dev/null \
       | sed -n 4p \
       | sed -e's/^ *//' \
       | cut -d' ' -f2- \
@@ -220,17 +239,8 @@ function get_db_param() {
 }
 
 function get_db_url_from_env() {
-    if [ -f "${CONTAO_DIR}/bin/console" ]
-    then
-       COMMAND="${PHP_CLI} ${CONTAO_DIR}/bin/console debug:dotenv"
-    else
-      if [ -f "${CONTAO_DIR}/vendor/bin/contao-console" ]
-      then
-        COMMAND="${PHP_CLI} ${CONTAO_DIR}/vendor/bin/contao-console debug:dotenv"
-      else
-        echo "Weder bin/console noch vendor/bin/contao-console gefunden. Irgendetwas stimmt hier nicht!"; exit
-      fi
-    fi
+    CONSOLE=$(get_contao_console)
+    COMMAND="${CONSOLE} debug:dotenv"
     $COMMAND \
     | grep DATABASE_URL \
     | sed -e's/^ *DATABASE_URL *//' \
