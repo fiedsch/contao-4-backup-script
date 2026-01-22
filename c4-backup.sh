@@ -87,6 +87,10 @@ if [ -z "${OS}" ]
   then assert_command 'uname' "(Behebung: 'OS' setzen)" || return
 fi
 
+# Wir müssen encoded Passwörter decoden, bevor wir sie in die my.ncf schreiben (siehe #15)
+# See https://stackoverflow.com/questions/6250698/how-to-decode-url-encoded-string-in-shell
+function urldecode() { : "${*//+/ }"; echo -e "${_//%/\\x}"; }
+
 
 # Variablen bereinigen
 
@@ -357,8 +361,8 @@ fi
 
 # write credentials file so we don't have to specify the password as a command line argument
 echo '[mysqldump]' > "${TARGET_DIR}/my.cnf"
-echo "user='${DBUSER}'" >> "${TARGET_DIR}/my.cnf"
-echo "password='${DBPASSWORD}'" >> "${TARGET_DIR}/my.cnf"
+echo "user='$(urldecode ${DBUSER})'" >> "${TARGET_DIR}/my.cnf"
+echo "password='$(urldecode ${DBPASSWORD})'" >> "${TARGET_DIR}/my.cnf"
 
 
 ${MYSQLDUMP} \
