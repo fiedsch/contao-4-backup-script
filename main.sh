@@ -93,7 +93,7 @@ CONTAO_DIR=/path/to/contao/installation/directory
 # Web-Root = der öffentlich erreichbare Unterordner.
 # web (oder public ab Contao 4.12)
 # siehe auch https://docs.contao.org/manual/de/installation/systemvoraussetzungen/#hosting-konfiguration
-WEB_ROOT=web
+WEB_ROOT=public
 
 
 # Soll das files Verzeichnis auch gesichert werden?
