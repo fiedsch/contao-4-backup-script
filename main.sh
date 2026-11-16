@@ -145,7 +145,7 @@ DBOPTIONS='--hex-blob --add-drop-table --comments --dump-date --no-tablespaces'
 # Vgl. auch https://docs.contao.org/manual/de/cli/datenbank-backups/#konfigurationsmoeglichkeiten
 
 #SKIP_THESE_TABLES=''
-SKIP_THESE_TABLES='tl_crawl_queue tl_log tl_search tl_search_index tl_search_term tl_undo tl_version'
+SKIP_THESE_TABLES='tl_crawl_queue tl_log tl_search tl_search_index tl_search_term tl_undo tl_version tl_crawl_queue'
 
 
 # Alte Backups nach x Tagen periodisch löschen?
